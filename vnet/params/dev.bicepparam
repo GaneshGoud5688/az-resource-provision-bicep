@@ -1,9 +1,35 @@
-param resourceGroupName string = 'myapp-dev-rg'
-param project string = 'myapp'
-param environment string = 'dev'
-param location string = 'eastus'
-param tags object = {
-  project: 'myapp'
+using '../main.bicep'
+
+param project = 'finance'
+param environment = 'dev'
+param location = 'eastus'
+
+param addressPrefixes = [
+  '10.0.0.0/16'
+]
+
+param subnets = [
+  {
+    name: 'subnet1'
+    addressPrefix: '10.0.1.0/24'
+    serviceEndpoints: [
+      {
+        service: 'Microsoft.Storage'
+      }
+    ]
+    privateEndpointNetworkPolicies: 'Enabled'
+    privateLinkServiceNetworkPolicies: 'Enabled'
+  },  {
+    name: 'subnet2'
+    addressPrefix: '10.0.2.0/24'
+    serviceEndpoints: []
+    privateEndpointNetworkPolicies: 'Disabled'
+    privateLinkServiceNetworkPolicies: 'Disabled'
+  }
+]
+
+
+param tags = {
   environment: 'dev'
-  createdBy: 'bicep-module'
+  owner: 'ABC'
 }

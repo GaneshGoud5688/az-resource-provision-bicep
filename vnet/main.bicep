@@ -1,48 +1,36 @@
-@description('Target resource group name')
-param resourceGroupName string
+targetScope = 'resourceGroup'
 
-@description('Project or application name')
+@description('The project or application identifier, used to generate the VNet name.')
 param project string
 
-@description('Deployment environment (dev, test, prod)')
+@description('The environment name (e.g., "dev", "prod"). Used to generate the VNet name.')
 param environment string
 
-@description('Location for the resources')
+@description('The Azure region where the VNet will be created. Examples: "eastus", "westeurope".')
 param location string
 
-var addressPrefixes = [
-  '10.0.0.0/16'
-]
+@description('The address space for the VNet (e.g., ["10.0.0.0/16"]).')
+param addressPrefixes array
 
-var subnets = [
-  {
-    name: 'web'
-    addressPrefix: '10.0.1.0/24'
-    delegation: null
-    serviceEndpoints: ['Microsoft.Storage']
-    privateEndpointNetworkPolicies: 'Enabled'
-    privateLinkServiceNetworkPolicies: 'Enabled'
-  }
-  {
-    name: 'db'
-    addressPrefix: '10.0.2.0/24'
-    delegation: null
-    serviceEndpoints: []
-    privateEndpointNetworkPolicies: 'Enabled'
-    privateLinkServiceNetworkPolicies: 'Enabled'
-  }
-]
+@description('Array of subnet configurations.')
+param subnets array
 
-module vnet 'modules/vnet.bicep' = {
-  name: 'vnet-${environment}'
+@description('Optional resource group name (can be used in tags). If not specified, the current resource group will be used.')
+param resourceGroupName string = resourceGroup().name
+
+@description('Optional tags to apply to the VNet for categorization and resource management.')
+param tags object = {}
+
+module vnetModule 'modules/vnet.bicep' = {
+  name: 'create-vnet'
   params: {
     project: project
     environment: environment
     location: location
     addressPrefixes: addressPrefixes
     subnets: subnets
-    resourceGroupName: resourceGroupName
+    tags: tags
   }
 }
 
-output vnetName string = vnet.outputs.vnetName
+output createdVnetName string = vnetModule.outputs.vnetName

@@ -1,4 +1,10 @@
-param resourceGroupName = 'myapp-prod-rg'
-param project = 'myapp'
+using '../main.bicep'
+
+
 param environment = 'prod'
-param location = 'westus2'
+param project = 'finance'
+param location = 'eastus'
+param tags = {
+  environment: 'dev'
+  owner: 'ABC'
+}

@@ -16,8 +16,7 @@ This repository contains a reusable Azure Bicep module to create an Azure Resour
 
 | Parameter          | Type    | Required | Description                              | Example          |
 |--------------------|---------|----------|------------------------------------------|------------------|
-| `resourceGroupName` | string  | Yes      | Name of the resource group                | `myapp-dev-rg`   |
-| `project`          | string  | Yes      | Project or application name                | `myapp`          |
+| `project`          | string  | Yes      | Project or application name                | `finance`          |
 | `environment`      | string  | Yes      | Deployment environment (dev, test, prod)  | `dev`            |
 | `location`         | string  | Yes      | Azure region/location                      | `eastus`         |
 | `tags`             | object  | No       | Tags to apply on the resource group       | `{ project: 'myapp', environment: 'dev' }` |

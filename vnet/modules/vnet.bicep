@@ -1,3 +1,5 @@
+targetScope = 'resourceGroup'
+
 @description('Project or application identifier')
 param project string
 
@@ -13,38 +15,41 @@ param addressPrefixes array
 @description('Array of subnet configurations')
 param subnets array
 
-@description('Target resource group name (optional, used in tags)')
-param resourceGroupName string = resourceGroup().name
+@description('A set of key-value pairs to apply as tags to the resource group. Tags can be used for categorization, billing, and resource management.')
+param tags object = {}
 
-// Compose VNet name from project + environment
-var vnetName = '${project}-vnet-${environment}'
-
-// Default tags to apply on the VNet
-var defaultTags = {
-  environment: environment
-  project: project
-  resourceGroup: resourceGroupName
-  deployedBy: 'bicep'
-}
+var vnetName = 'vnet-${project}-${environment}'
 
 resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   name: vnetName
   location: location
-  tags: defaultTags
+  tags: tags
   properties: {
     addressSpace: {
       addressPrefixes: addressPrefixes
     }
-    subnets: [for subnet in subnets: {
-      name: subnet.name
-      properties: {
-        addressPrefix: subnet.addressPrefix
-        delegation: subnet.delegation
-        serviceEndpoints: subnet.serviceEndpoints
-        privateEndpointNetworkPolicies: subnet.privateEndpointNetworkPolicies
-        privateLinkServiceNetworkPolicies: subnet.privateLinkServiceNetworkPolicies
+    subnets: [
+      for subnet in subnets: {
+        name: subnet.name
+        properties: union(
+          {
+            addressPrefix: subnet.addressPrefix
+          },
+          // empty(subnet.delegation) ? {} : {
+          //   delegation: subnet.delegation
+          // },
+          empty(subnet.serviceEndpoints) ? {} : {
+            serviceEndpoints: subnet.serviceEndpoints
+          },
+          empty(subnet.privateEndpointNetworkPolicies) ? {} : {
+            privateEndpointNetworkPolicies: subnet.privateEndpointNetworkPolicies
+          },
+          empty(subnet.privateLinkServiceNetworkPolicies) ? {} : {
+            privateLinkServiceNetworkPolicies: subnet.privateLinkServiceNetworkPolicies
+          }
+        )
       }
-    }]
+    ]
   }
 }
 
