@@ -22,22 +22,24 @@ param enableNonSslPort bool = false
 @description('Tags to apply to the Redis Cache instance')
 param tags object = {}
 
-resource redisCache 'Microsoft.Cache/Redis@2023-04-01' = {
+var redisCacheFamily = toLower(skuName) == 'premium' ? 'P' : 'C'
+
+resource redisCache 'Microsoft.Cache/redis@2023-08-01' = {
   name: redisCacheName
   location: location
   tags: tags
-  sku: {
-    name: skuName
-    family: skuName == 'Premium' ? 'P' : 'C'
-    capacity: skuCapacity
-  }
   properties: {
     enableNonSslPort: enableNonSslPort
     minimumTlsVersion: '1.2'
+    sku: {
+      name: skuName
+      family: redisCacheFamily
+      capacity: skuCapacity
+    }
     redisConfiguration: {
-      maxclients: '1000'
-      maxmemory-reserved: '2'
-      maxfragmentationmemory-reserved: '2'
+      'maxmemory-reserved': '2'
+      'maxfragmentationmemory-reserved': '2'
+      'aad-enabled': 'true'
     }
   }
 }

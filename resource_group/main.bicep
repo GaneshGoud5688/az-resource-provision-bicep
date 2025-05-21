@@ -17,7 +17,7 @@ param location string
 param tags object = {}
 
 // Create resource group name using project and environment
-var dynamicResourceGroupName = '${project}-${environment}'
+var dynamicResourceGroupName = 'rg-${project}-${environment}'
 
 // Call the module to create the resource group
 module rgModule 'modules/resourceGroup.bicep' = {

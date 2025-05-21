@@ -13,7 +13,7 @@ param location string
 param tags object = {}
 
 param appServicePlanName string = '${project}-${environment}-appserviceplan'
-param webAppName string = '${project}-${environment}-webapp'
+param webAppName string = 'webapp-${project}-${environment}'
 param skuName string = 'F1'
 param runtimeStack string = 'PYTHON|3.9'
 
