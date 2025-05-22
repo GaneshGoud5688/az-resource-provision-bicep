@@ -22,4 +22,3 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
 }
 
 output storageAccountId string = storageAccount.id
-output storageAccountPrimaryConnectionString string = listKeys(storageAccount.id, '2022-09-01').keys[0].value

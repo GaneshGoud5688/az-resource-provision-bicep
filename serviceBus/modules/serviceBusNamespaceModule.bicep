@@ -23,10 +23,6 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
     name: skuName
     tier: skuName
   }
-  properties: {
-    isAutoInflateEnabled: false
-    maximumThroughputUnits: 0
-  }
 }
 
 output serviceBusNamespaceId string = serviceBusNamespace.id

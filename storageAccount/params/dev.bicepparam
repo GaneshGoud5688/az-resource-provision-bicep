@@ -1,3 +1,5 @@
+using '../main.bicep'
+
 @description('Project or application name')
 param project = 'finance'
 

@@ -17,4 +17,3 @@ module storage 'modules/storageAccountModule.bicep' = {
 }
 
 output storageAccountId string = storage.outputs.storageAccountId
-output storageAccountConnectionString string = storage.outputs.storageAccountPrimaryConnectionString

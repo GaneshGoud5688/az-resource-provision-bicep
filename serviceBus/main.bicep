@@ -5,7 +5,7 @@ param environment string
 param location string
 param tags object = {}
 
-param namespaceName string = toLower('${project}-${environment}-sb')
+param namespaceName string = toLower('sb-${project}-${environment}')
 param queueName string = 'myqueue'
 
 param skuName string = 'Standard'
